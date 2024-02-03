@@ -1,7 +1,7 @@
 # Unix Utils
 implementation of pwd, mv and echo shell commands.
 **runing the code**
-1. mv command
+### `mv` command
 ``` bash
 gcc mymv.c -o mymv
 ./mymv <src> <dest>
@@ -11,8 +11,7 @@ gcc mymv.c -o mymv
 ./mymv test.c testdir/
 test.c --> testdir/test.c
 ```
-
-2. echo command
+### `echo` command
 ``` bash
 gcc myecho.c -o myecho
 ./myecho <string>
@@ -23,7 +22,7 @@ gcc myecho.c -o myecho
 hello
 ```
 
-3. pwd command
+### `pwd` command
 ``` bash
 gcc mypwd.c -o mypwd
 ./mypwd
