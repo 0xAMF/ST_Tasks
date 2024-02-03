@@ -3,7 +3,6 @@
 
 // Macros section
 #define DBG
-#define MAX_TOKN 100
 
 // includes section
 #include <stdio.h>
