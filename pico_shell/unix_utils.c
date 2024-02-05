@@ -2,31 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-// mv function 
-ret_status_t my_mv(char *src, char *dest)
-{
-	ret_status_t ret = OK;
-
-	int mv_ret = rename(src, dest);
-	if (mv_ret == -1) {
-		// check if a directory is passed
-		dest = strcat(dest, src);
-		mv_ret = rename(src, dest);
-		
-		if (mv_ret == -1) {
-			printf("file does not exit\n");
-			ret = NOK;
-		}else {
-			printf("%s ==> %s\n", src, dest);
-		}
-	}
-	else {
-		printf("%s ==> %s\n", src, dest);
-	}
-
-	return ret;
-}
+#include <unistd.h>
 
 // pwd function
 void my_pwd()
@@ -55,17 +31,35 @@ void my_pwd()
 }
 
 // echo function
-ret_status_t my_echo(char *str)
+ret_status_t my_echo(char **argv, int argc)
 {
 	ret_status_t ret = OK;
 
-	if (str != NULL) {
-		printf("%s\n", str);
+	if (argv != NULL) {
+		for (int i = 1; i < argc; i++) {
+			printf("%s ", argv[i]);
+		}
+		printf("\n");
 	} else {
-		#ifdef DBG
 		printf("NULL pointer error!!\n");
-		#endif				/* ifdef DBG */
 		ret = NOK;
+	}
+
+	return ret;
+}
+
+ret_status_t cd(char *dir)
+{
+	ret_status_t ret = OK;
+	int chdir_ret;
+
+	chdir_ret = chdir(dir);
+
+	if (chdir_ret == -1) {
+		printf("cd: %s: no Such file or directory\n", dir);
+		chdir_ret = NOK;
+	} else {
+		my_pwd();
 	}
 
 	return ret;

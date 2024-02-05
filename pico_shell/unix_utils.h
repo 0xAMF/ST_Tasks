@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -23,6 +24,8 @@ ret_status_t my_mv(char *src, char *dest);
 // pwd function
 void my_pwd();
 // echo function
-ret_status_t my_echo(char *str);
+ret_status_t my_echo(char **argv, int argc);
+// cd function
+ret_status_t cd(char *dir);
 
 #endif // !__UNIX_UTILS_H
