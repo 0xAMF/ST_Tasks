@@ -31,7 +31,7 @@ int main(void)
 		input_size = strlen(user_input);
 		user_input[input_size - 1] = 0;
 
-		if (input_size == 0)
+		if (input_size == 1)
 			continue;
 
 		// parse the command
