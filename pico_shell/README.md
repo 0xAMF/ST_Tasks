@@ -9,4 +9,5 @@ gcc pico_shell.c unix_utils.c -o pico
 ```
 
 **Output example**
+
 ![](https://github.com/0xAMF/ST_Tasks/blob/main/pico_shell/test_cases/picoshell_test.png)
