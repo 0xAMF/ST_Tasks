@@ -31,6 +31,7 @@ int main(void)
 		input_size = strlen(user_input);
 		user_input[input_size - 1] = 0;
 
+		// if no input is received, only entering
 		if (input_size == 1)
 			continue;
 
