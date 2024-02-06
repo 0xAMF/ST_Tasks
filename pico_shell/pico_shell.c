@@ -75,6 +75,7 @@ int main(void)
 				// execute process on child 
 				execute_ret = execvp(arg_vector[0], arg_vector);
 				if (execute_ret == -1) {
+					printf("%s: command not found\n", arg_vector[0]);
 					continue;
 				}
 
