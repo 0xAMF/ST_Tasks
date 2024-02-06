@@ -81,7 +81,6 @@ int main(void)
 			} else {
 				printf("Fork failed!\n");
 			}
-
 		}
 	}
 
