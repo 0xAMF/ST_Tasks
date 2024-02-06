@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 // pwd function
-void my_pwd()
+char* my_pwd()
 {
 	int size = 265;
 	char *buf = malloc(size);
@@ -14,9 +14,7 @@ void my_pwd()
 
 	getcwd_ret = getcwd(buf, size);
 
-	if (getcwd_ret != NULL) {
-		printf("%s\n", buf);
-	} else {
+	if (getcwd_ret == NULL) {
 		// allocate enough memory for the pathname string
 		while ((getcwd_ret = getcwd(buf, size)) == NULL) {
 			free(buf);
@@ -26,8 +24,9 @@ void my_pwd()
 
 		// after allocating enough memory print the pathname
 		getcwd_ret = getcwd(buf, size);
-		printf("%s\n", buf);
-	}
+	} 
+	
+	return buf;
 }
 
 // echo function

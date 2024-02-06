@@ -22,7 +22,7 @@ typedef enum {
 // mv function 
 ret_status_t my_mv(char *src, char *dest);  
 // pwd function
-void my_pwd();
+char* my_pwd();
 // echo function
 ret_status_t my_echo(char **argv, int argc);
 // cd function

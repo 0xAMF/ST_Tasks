@@ -20,7 +20,7 @@ int main(void)
 	while (1) {
 		arg_count = 0;
 		// prompt the user and take input
-		printf("Pico@Shell$ ");
+		printf("Pico@Shell:%s$ ", my_pwd());
 		getline(&user_input, &input_buf_size, stdin);
 		if (user_input == NULL) {
 			printf("Failed to take input\n");
@@ -50,7 +50,8 @@ int main(void)
 			if (arg_count != 1) {
 				printf("usage: pwd\n");
 			} else {
-				my_pwd();
+				char *cwd = my_pwd();
+				printf("%s\n", cwd);
 			}
 		} else if (!strcmp(arg_vector[0], "cd")) {
 			if (arg_count != 2) {
@@ -76,9 +77,8 @@ int main(void)
 				execute_ret = execvp(arg_vector[0], arg_vector);
 				if (execute_ret == -1) {
 					printf("%s: command not found\n", arg_vector[0]);
-					continue;
+					return -1;
 				}
-
 			} else {
 				printf("Fork failed!\n");
 			}
