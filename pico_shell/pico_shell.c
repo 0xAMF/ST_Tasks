@@ -13,10 +13,11 @@ int main(void)
 	char *arg_vector[MAX];
 	char *token;
 	int arg_count;
-	int i = 0;
+	int i = 0, counter = 0;
 	int input_size, wstatus, execute_ret;
 	size_t input_buf_size = 1024;
 	ret_status_t ret = OK;
+	char *new_input;
 
 	while (1) {
 		arg_count = 0;
@@ -29,6 +30,21 @@ int main(void)
 			exit(-1);
 		}
 
+		// implementing escape sequence
+		for (int i = 0; i < strlen(user_input); i++) {
+			if (user_input[i] == '\\') {
+				new_input = user_input + i;
+				counter += i;
+				while (1) {
+					printf("> ");
+					getline(&new_input, &input_buf_size, stdin);
+					if (user_input[strlen(user_input) - 1] == '\n') {
+						break;
+					}
+				}
+			}
+		}
+		
 		input_size = strlen(user_input);
 		user_input[input_size - 1] = 0;
 
@@ -44,6 +60,7 @@ int main(void)
 		}
 		arg_vector[arg_count] = NULL;
 
+		// built-in commands commands
 		if (!strcmp(arg_vector[0], "exit")) {
 			printf("Ok, Bye :^)\n");
 			exit(0);
@@ -94,3 +111,4 @@ int main(void)
 
 	return EXIT_SUCCESS;
 }
+
