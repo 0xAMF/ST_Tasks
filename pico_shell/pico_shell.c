@@ -9,6 +9,7 @@
 int main(void)
 {
 	char *user_input = NULL;
+	char *cwd = NULL;
 	char *arg_vector[MAX];
 	char *token;
 	int arg_count;
@@ -16,22 +17,22 @@ int main(void)
 	int input_size, wstatus, execute_ret;
 	size_t input_buf_size = 1024;
 	ret_status_t ret = OK;
-	
+
 	while (1) {
 		arg_count = 0;
+		my_pwd(&cwd);
 		// prompt the user and take input
-		printf("Pico@Shell:%s$ ", my_pwd());
+		printf("Pico@Shell:%s$ ", cwd);
 		getline(&user_input, &input_buf_size, stdin);
 		if (user_input == NULL) {
 			printf("Failed to take input\n");
-			free(user_input);
-			continue;
+			exit(-1);
 		}
 
 		input_size = strlen(user_input);
 		user_input[input_size - 1] = 0;
 
-		// if no input is received, only entering
+		// if no input is received, only entering enter
 		if (input_size == 1)
 			continue;
 
@@ -50,7 +51,6 @@ int main(void)
 			if (arg_count != 1) {
 				printf("usage: pwd\n");
 			} else {
-				char *cwd = my_pwd();
 				printf("%s\n", cwd);
 			}
 		} else if (!strcmp(arg_vector[0], "cd")) {
@@ -75,14 +75,19 @@ int main(void)
 			} else if (ret_pid == 0) {	// child process case
 				// execute process on child 
 				execute_ret = execvp(arg_vector[0], arg_vector);
-				if (execute_ret == -1) {
-					printf("%s: command not found\n", arg_vector[0]);
-					return -1;
+				if (execute_ret < 0) {
+					printf("%s: command not found\n",
+					       arg_vector[0]);
+					free(cwd);
+					free(user_input);
+					exit(-1);
 				}
 			} else {
 				printf("Fork failed!\n");
 			}
 		}
+
+		free(cwd);
 	}
 
 	free(user_input);

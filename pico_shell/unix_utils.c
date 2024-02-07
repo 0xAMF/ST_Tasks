@@ -5,10 +5,10 @@
 #include <unistd.h>
 
 // pwd function
-char* my_pwd()
+void my_pwd(char **cwd)
 {
-	int size = 265;
-	char *buf = malloc(size);
+	int size = 128;
+	char *buf = malloc(size * sizeof(char));
 	char *getcwd_ret;
 	char *str_ptr;
 
@@ -24,9 +24,9 @@ char* my_pwd()
 
 		// after allocating enough memory print the pathname
 		getcwd_ret = getcwd(buf, size);
-	} 
-	
-	return buf;
+	}
+
+	*cwd = buf;
 }
 
 // echo function
@@ -58,7 +58,6 @@ ret_status_t cd(char *dir)
 		printf("cd: %s: no Such file or directory\n", dir);
 		chdir_ret = NOK;
 	} else {
-		my_pwd();
 	}
 
 	return ret;
