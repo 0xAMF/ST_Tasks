@@ -35,13 +35,8 @@ int main(void)
 			if (user_input[i] == '\\') {
 				new_input = user_input + i;
 				counter += i;
-				while (1) {
-					printf("> ");
-					getline(&new_input, &input_buf_size, stdin);
-					if (user_input[strlen(user_input) - 1] == '\n') {
-						break;
-					}
-				}
+				printf("> ");
+				getline(&new_input, &input_buf_size, stdin);
 			}
 		}
 		
