@@ -7,7 +7,8 @@ Pico shell is an updated version of femto shell which is a simple shell written 
 gcc pico_shell.c unix_utils.c -o pico
 ./pico
 ```
-
+**Supported Features**
+* escape sequences (", ', \\)
 **Output example**
 
 ![](https://github.com/0xAMF/ST_Tasks/blob/main/pico_shell/test_cases/picoshell_test.png)
