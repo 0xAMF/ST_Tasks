@@ -8,6 +8,8 @@ gcc pico_shell.c unix_utils.c -o pico
 ./pico
 ```
 **Supported Features**
+* cd, pwd and echo internal commands
+* Executing external commands located in PATH
 * escape sequences (", ', \\)
 **Output example**
 
