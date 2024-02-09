@@ -15,8 +15,8 @@
 #include <fcntl.h>
 
 typedef enum {
-  OK = 0,
-  NOK = -1
+  RET_OK = 0,
+  RET_NOK = -1
 }ret_status_t;
 
 // mv function 

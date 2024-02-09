@@ -32,7 +32,7 @@ void my_pwd(char **cwd)
 // echo function
 ret_status_t my_echo(char **argv, int argc)
 {
-	ret_status_t ret = OK;
+	ret_status_t ret = RET_OK;
 
 	if (argv != NULL) {
 		for (int i = 1; i < argc; i++) {
@@ -41,7 +41,7 @@ ret_status_t my_echo(char **argv, int argc)
 		printf("\n");
 	} else {
 		printf("NULL pointer error!!\n");
-		ret = NOK;
+		ret = RET_NOK;
 	}
 
 	return ret;
@@ -49,14 +49,14 @@ ret_status_t my_echo(char **argv, int argc)
 
 ret_status_t cd(char *dir)
 {
-	ret_status_t ret = OK;
+	ret_status_t ret = RET_OK;
 	int chdir_ret;
 
 	chdir_ret = chdir(dir);
 
 	if (chdir_ret == -1) {
 		printf("cd: %s: no Such file or directory\n", dir);
-		chdir_ret = NOK;
+		chdir_ret = RET_NOK;
 	} else {
 	}
 
