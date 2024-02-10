@@ -1,4 +1,5 @@
 #include "unix_utils.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,30 +7,36 @@
 
 #define IO_WRITE 0
 
+
+ret_status_t execute(char *command, char **argv, int argc);
+
+char *cwd = NULL;
+
+int max_args = 265;
+char *user_input = NULL;
+char *new_input = NULL;
+char **arg_vector;
+char *token;
+int arg_count;
+int i = 0, counter = 0, new_arg_size = 0;
+int input_size, wstatus, execute_ret;
+size_t input_buf_size = 1024;
+ret_status_t ret = RET_OK;
+char esc_seq;
+
+
 int main(void)
 {
-	int max_args = 265;
-	char *user_input = NULL;
-	char *cwd = NULL;
-	char **arg_vector;
-	char *token;
-	int arg_count;
-	int i = 0, counter = 0, new_arg_size = 0;
-	int input_size, wstatus, execute_ret;
-	size_t input_buf_size = 1024;
-	ret_status_t ret = RET_OK;
-	char *new_input;
-	char esc_seq;
-
 	arg_vector = (char **) malloc(max_args * sizeof(char *));
 	if (arg_vector == NULL) {
 		printf("Couldn't allocate memory for the argument vector\n");
+		exit(-1);
 	}
 
 	while (1) {
 		arg_count = 0;
 		my_pwd(&cwd);
-		
+
 		// prompt the user and take input
 		printf("Pico@Shell:%s$ ", cwd);
 		getline(&user_input, &input_buf_size, stdin);
@@ -37,7 +44,7 @@ int main(void)
 			printf("Failed to take input\n");
 			exit(-1);
 		}
-		
+
 		/* ==== implementing escape sequences ===*/
 		for (int i = 0; i < strlen(user_input); i++) {
 			if (user_input[i] == '\\') { // in case of backslash
@@ -70,9 +77,9 @@ int main(void)
 		// make the last character null instead of \n
 		user_input[strlen(user_input) - 1] = 0;
 		// if no input is received, only entering enter
-		if (input_size == 1)
+		if (strlen(user_input) == 0)
 			continue;
-
+		
 		// parse the command
 		token = strtok(user_input, " \t");
 		while (token != NULL) {
@@ -92,27 +99,55 @@ int main(void)
 			}
 		}
 
-		// built-in commands commands
-		if (!strcmp(arg_vector[0], "exit")) {
+	// execute given commands
+		ret_status_t ret = execute(arg_vector[0], arg_vector, arg_count);
+		if (ret == EXIT) {
 			printf("Ok, Bye :^)\n");
-			exit(0);
-		} else if (!strcmp(arg_vector[0], "pwd")) {
-			if (arg_count != 1) {
+			free(cwd);
+			free(user_input);
+			free(arg_vector);
+			exit(EXIT_SUCCESS);
+		}
+		else if (ret == RET_NOK) {
+			printf("Couldn't execute command\n");
+			free(cwd);
+			free(user_input);
+			free(arg_vector);
+			exit(-1);
+		}
+		free(cwd);
+	}
+	
+	free(user_input);
+	free(arg_vector);
+
+	return EXIT_SUCCESS;
+}
+
+ret_status_t execute(char *command, char **argv, int argc) {
+	ret_status_t ret = RET_OK;	
+	int wstatus;
+	
+		// built-in commands commands
+		if (!strcmp(argv[0], "exit")) {
+			ret = EXIT;
+		} else if (!strcmp(argv[0], "pwd")) {
+			if (argc != 1) {
 				printf("usage: pwd\n");
 			} else {
 				printf("%s\n", cwd);
 			}
-		} else if (!strcmp(arg_vector[0], "cd")) {
-			if (arg_count != 2) {
+		} else if (!strcmp(argv[0], "cd")) {
+			if (argc != 2) {
 				printf("usage: cd <dest>\n");
 			} else {
-				ret = cd(arg_vector[1]);
+				ret = cd(argv[1]);
 			}
-		} else if (!strcmp(arg_vector[0], "echo")) {
-			if (arg_count < 2) {
+		} else if (!strcmp(argv[0], "echo")) {
+			if (argc < 2) {
 				printf("usage: echo <string>");
 			}
-			my_echo(arg_vector, arg_count);
+			my_echo(argv, argc);
 		} else {
 			// check if the command is external
 			// fork the process
@@ -123,24 +158,17 @@ int main(void)
 				wait(&wstatus);
 			} else if (ret_pid == 0) {	// child process case
 				// execute process on child 
-				execute_ret = execvp(arg_vector[0], arg_vector);
+				int execute_ret = execvp(argv[0], argv);
 				if (execute_ret < 0) {
 					printf("%s: command not found\n",
-					       arg_vector[0]);
-					free(cwd);
-					free(user_input);
-					exit(-1);
+					       argv[0]);
+					ret = RET_NOK;
 				}
 			} else {
 				printf("Fork failed!\n");
+				ret = RET_NOK;
 			}
 		}
-
-		free(cwd);
-	}
-
-	free(user_input);
-	free(arg_vector);
-
-	return EXIT_SUCCESS;
+	
+	return ret;
 }

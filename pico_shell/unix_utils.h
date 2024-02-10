@@ -16,7 +16,8 @@
 
 typedef enum {
   RET_OK = 0,
-  RET_NOK = -1
+  RET_NOK = -1,
+  EXIT = 1
 }ret_status_t;
 
 // mv function 
