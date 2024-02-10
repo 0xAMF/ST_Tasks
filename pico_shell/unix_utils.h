@@ -20,6 +20,16 @@ typedef enum {
   EXIT = 1
 }ret_status_t;
 
+typedef enum {
+  OUTPUT,
+  INPUT 
+} IO_FLAG;
+
+typedef  enum {
+  INTERNAL, 
+  EXTERNAL
+} CMD_TYPE;
+
 // mv function 
 ret_status_t my_mv(char *src, char *dest);  
 // pwd function
