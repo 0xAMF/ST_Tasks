@@ -13,4 +13,7 @@ gcc pico_shell.c unix_utils.c -o pico
 * escape sequences (", ', \\)
 **Output example**
 
-![](https://github.com/0xAMF/ST_Tasks/blob/main/pico_shell/test_cases/picoshell_test.mov)
+
+
+https://github.com/0xAMF/ST_Tasks/assets/126703114/1a9626ec-6e42-4b08-ab64-8f68e1cef67a
+
