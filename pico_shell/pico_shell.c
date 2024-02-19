@@ -36,7 +36,11 @@ int main(void)
 		my_pwd(&cwd);
 
 		// prompt the user and take input
-		printf("Pico@Shell:%s$ ", cwd);
+		printf("\033[1;34m"); // Bold blue text
+		printf("Pico@Shell:");
+		printf("\033[0m"); // Reset to default color and style
+		printf("%s$ ", cwd);
+		
 		getline(&user_input, &input_buf_size, stdin);
 		if (user_input == NULL) {
 			printf("Failed to take input\n");
