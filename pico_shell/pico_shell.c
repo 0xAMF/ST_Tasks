@@ -5,7 +5,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#define IO_WRITE 0
 
 ret_status_t execute(char *command, char **argv, int argc);
 ret_status_t execute_builtin(char *command, char **argv, int argc);
